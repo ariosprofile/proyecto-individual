@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "library_users")
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

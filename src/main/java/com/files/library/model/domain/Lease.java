@@ -23,7 +23,7 @@ public class Lease {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "book_copy_id")
