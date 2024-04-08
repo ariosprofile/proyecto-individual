@@ -9,13 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class BookCopyDto {
+public class StockTypeDto {
 
     private Integer stock;
-
     private Integer type;
-
     private Double costPerDay;
-
     private List<LeasesDto> leasedCopies;
 }

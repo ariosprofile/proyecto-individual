@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookCopy {
+public class StockType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,6 +27,6 @@ public class BookCopy {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToMany(mappedBy = "bookCopy", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "stockType", cascade = CascadeType.ALL)
     private List<Lease> leases;
 }
