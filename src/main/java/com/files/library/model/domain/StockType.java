@@ -17,7 +17,11 @@ public class BookCopy {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    private Integer copies_available;
+    private Integer stock;
+
+    private Integer type;
+
+    private Double costPerDay;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
