@@ -12,11 +12,8 @@ import java.util.List;
 public class BookDto {
 
     private String author;
-
     private String  genre;
-
     private String title;
-
-    private List<BookCopyDto> bookCopies;
-
+    private String synopsis;
+    private List<StockTypeDto> bookCopies;
 }

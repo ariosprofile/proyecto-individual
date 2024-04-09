@@ -11,22 +11,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "library_users")
-public class User {
+public class StockType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "user_name")
-    private String userName;
+    private Integer stock;
 
-    private String password;
+    private Integer type;
 
-    private String address;
+    private Double costPerDay;
 
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "stockType", cascade = CascadeType.ALL)
     private List<Lease> leases;
 }

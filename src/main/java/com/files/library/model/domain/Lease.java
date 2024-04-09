@@ -16,16 +16,15 @@ public class Lease {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-
     private LocalDate leaseDate;
-
     private LocalDate returnDate;
+    private Double totalCost;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private LibraryUser user;
 
     @ManyToOne
-    @JoinColumn(name = "book_copy_id")
-    private BookCopy bookCopy;
+    @JoinColumn(name = "stock_type_id")
+    private StockType stockType;
 }

@@ -23,6 +23,8 @@ public class Book {
 
     private String genre;
 
+    private String synopsis;
+
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<BookCopy> bookCopies;
+    private List<StockType> stockTypes;
 }

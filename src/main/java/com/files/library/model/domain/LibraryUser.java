@@ -11,18 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookCopy {
+public class LibraryUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    private Integer copies_available;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
-
-    @OneToMany(mappedBy = "bookCopy", cascade = CascadeType.ALL)
+    private String userName;
+    private String password;
+    private String address;
+    private String email;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Lease> leases;
 }
