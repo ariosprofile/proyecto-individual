@@ -33,7 +33,7 @@ public class LeaseServiceImpl implements LeaseService {
         if (lease.isEmpty()){
             return "Couldn't find the lease with id: " + id;
         } else {
-            leaseRepository.delete(lease.get());
+            leaseRepository.deleteById(id);
             return "Lease successfully deleted.";
         }
     }
@@ -44,12 +44,13 @@ public class LeaseServiceImpl implements LeaseService {
         if (lease.isEmpty()){
             return "Lease with id " + id + " does not exists in our DB. Please, type a existent id.";
         } else {
-            leaseRepository.save(
-                    Lease.builder()
-                            .leaseDate(modifiedLease.getLeaseDate())
-                            .returnDate(modifiedLease.getReturnDate())
-                            .totalCost(modifiedLease.getTotalCost())
-                            .build());
+            Lease existingLease = lease.get();
+            existingLease.setLeaseDate(modifiedLease.getLeaseDate());
+            existingLease.setUser(modifiedLease.getUser());
+            existingLease.setTotalCost(modifiedLease.getTotalCost());
+            existingLease.setReturnDate(modifiedLease.getReturnDate());
+            existingLease.setStockType(modifiedLease.getStockType());
+            leaseRepository.save(existingLease);
             return "Lease with id " + id + " successfully updated.";
         }
     }

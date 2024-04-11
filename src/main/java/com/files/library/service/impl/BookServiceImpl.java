@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
     public String deleteBookById(Integer id) {
         Optional<Book> book = bookRepository.findById(id);
 
-        if (book.isEmpty()){
+        if (book.isEmpty()) {
             return "Couldn't find the book with id: " + id;
         } else {
             bookRepository.delete(book.get());
@@ -51,20 +51,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String modifyBookById(Integer id, Book modifiedBook) {
-        Optional<Book> book = bookRepository.findById(id);
+        Optional<Book> optionalBook = bookRepository.findById(id);
 
-        if (book.isEmpty()){
-            return "Book with id " + id + " does not exists in our DB. Please, type a existent id.";
-        } else {
-            bookRepository.save(
-                    Book.builder()
-                            .id(id)
-                            .author(modifiedBook.getAuthor())
-                            .genre(modifiedBook.getGenre())
-                            .synopsis(modifiedBook.getSynopsis())
-                            .title(modifiedBook.getTitle())
-                            .build());
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setAuthor(modifiedBook.getAuthor());
+            book.setGenre(modifiedBook.getGenre());
+            book.setTitle(modifiedBook.getTitle());
+            book.setSynopsis(modifiedBook.getSynopsis());
+            book.setStockTypes(modifiedBook.getStockTypes());
+            bookRepository.save(book);
             return "Book with id " + id + " successfully updated.";
+        } else {
+            return "Book with id " + id + " does not exist in our DB. Please, type an existent id.";
         }
     }
 }

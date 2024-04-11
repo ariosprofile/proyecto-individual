@@ -34,6 +34,7 @@ public class StockTypeServiceImpl implements StockTypeService {
         if (stock.isEmpty()){
             return "Stock with id " + id + "does not exists in our DB.";
         } else {
+            stockTypeRepository.deleteById(id);
             return "Stock successfully deleted";
         }
     }
@@ -46,12 +47,13 @@ public class StockTypeServiceImpl implements StockTypeService {
         if (stock.isEmpty()){
             return "Stock with id " + id + " does not exists in our DB. Please, type a existent id.";
         } else {
-            stockTypeRepository.save(
-                    StockType.builder()
-                    .type(stockType.getType())
-                            .stock(stockType.getStock())
-                            .costPerDay(stockType.getCostPerDay())
-                            .build());
+            StockType existingStock = stock.get();
+            existingStock.setStock(stockType.getStock());
+            existingStock.setType(stockType.getType());
+            existingStock.setCostPerDay(stockType.getCostPerDay());
+            existingStock.setLeases(stockType.getLeases());
+            existingStock.setBook(stockType.getBook());
+            stockTypeRepository.save(existingStock);
             return "Stock with id " + id + " successfully updated.";
         }
     }

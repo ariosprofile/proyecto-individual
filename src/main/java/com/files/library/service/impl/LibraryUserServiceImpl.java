@@ -39,6 +39,7 @@ public class LibraryUserServiceImpl implements LibraryUserService {
         if (user.isEmpty()){
             return "The user with id " + id + "does not exists in our BD.";
         } else {
+            libraryUserRepository.deleteById(id);
             return "User with id " + id + " successfully deleted.";
         }
     }
@@ -50,13 +51,13 @@ public class LibraryUserServiceImpl implements LibraryUserService {
         if (user.isEmpty()){
             return "User with id " + id + " does not exists in our DB. Please, type a existent id.";
         } else {
-            libraryUserRepository.save(
-                    LibraryUser.builder()
-                            .address(libraryUser.getAddress())
-                            .userName(libraryUser.getUserName())
-                            .email(libraryUser.getEmail())
-                            .password(libraryUser.getPassword())
-                            .build());
+            LibraryUser existingUser = user.get();
+            existingUser.setUserName(libraryUser.getUserName());
+            existingUser.setAddress(libraryUser.getAddress());
+            existingUser.setEmail(libraryUser.getEmail());
+            existingUser.setPassword(libraryUser.getPassword());
+            existingUser.setLeases(libraryUser.getLeases());
+            libraryUserRepository.save(existingUser);
             return "User with id " + id + " successfully updated.";
         }
     }
