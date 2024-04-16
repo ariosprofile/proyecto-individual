@@ -1,6 +1,7 @@
 package com.files.library.controller.impl;
 
 import com.files.library.controller.BookApi;
+import com.files.library.model.BookDto;
 import com.files.library.model.domain.Book;
 import com.files.library.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -16,22 +17,22 @@ public class BookController implements BookApi {
     private final BookService bookService;
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<BookDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @Override
-    public List<Book> getBookByTitle(String title) {
+    public List<BookDto> getBookByTitle(String title) {
         return bookService.getBookByTitle(title);
     }
 
     @Override
-    public Book getBookById(Integer id) {
+    public BookDto getBookById(Integer id) {
         return bookService.getBookById(id);
     }
 
     @Override
-    public Book createBook(Book book) {
+    public Book createBook(BookDto book) {
         return bookService.createBook(book);
     }
 

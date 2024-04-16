@@ -1,5 +1,6 @@
 package com.files.library.service;
 
+import com.files.library.model.LeaseDto;
 import com.files.library.model.domain.Lease;
 import com.files.library.repository.LeaseRepository;
 import com.files.library.service.impl.LeaseServiceImpl;
@@ -42,7 +43,7 @@ class LeaseServiceTest {
         when(leaseRepository.findByUserId(userId)).thenReturn(leases);
 
 
-        List<Lease> result = leaseService.getLeasesByUserId(userId);
+        List<LeaseDto> result = leaseService.getLeasesByUserId(userId);
 
 
         verify(leaseRepository, times(1)).findByUserId(userId);
@@ -65,7 +66,7 @@ class LeaseServiceTest {
         when(leaseRepository.findByStockTypeId(stockId)).thenReturn(leases);
 
 
-        List<Lease> result = leaseService.getLeasesByStockId(stockId);
+        List<LeaseDto> result = leaseService.getLeasesByStockId(stockId);
 
 
         verify(leaseRepository, times(1)).findByStockTypeId(stockId);
@@ -116,7 +117,7 @@ class LeaseServiceTest {
     void modifyLeaseById_LeaseExists_SuccessfullyUpdated() {
 
         int id = 1;
-        Lease modifiedLease = new Lease(id, null, null, 50.0, null, null);
+        LeaseDto modifiedLease = new LeaseDto();
 
 
         when(leaseRepository.findById(id)).thenReturn(Optional.of(new Lease()));
@@ -136,7 +137,7 @@ class LeaseServiceTest {
     void modifyLeaseById_LeaseDoesNotExist_ReturnsErrorMessage() {
 
         int id = 1;
-        Lease modifiedLease = new Lease(id, null, null, 50.0, null, null);
+        LeaseDto modifiedLease = new LeaseDto();
 
 
         when(leaseRepository.findById(id)).thenReturn(Optional.empty());

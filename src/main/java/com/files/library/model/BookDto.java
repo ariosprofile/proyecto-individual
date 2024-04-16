@@ -1,19 +1,19 @@
 package com.files.library.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookDto {
 
     private String author;
     private String  genre;
     private String title;
     private String synopsis;
-    private List<StockTypeDto> bookCopies;
+    private List<StockTypeDto> stockTypes;
 }

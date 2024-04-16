@@ -1,8 +1,10 @@
 package com.files.library.service;
 
+import com.files.library.model.StockTypeDto;
 import com.files.library.model.domain.StockType;
 import com.files.library.repository.StockTypeRepository;
 import com.files.library.service.impl.StockTypeServiceImpl;
+import com.files.library.util.StockTypeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -42,7 +44,7 @@ class StockTypeServiceTest {
         when(stockTypeRepository.findByBookId(bookId)).thenReturn(stocks);
 
 
-        List<StockType> result = stockTypeService.getStocksByBookId(bookId);
+        List<StockTypeDto> result = stockTypeService.getStocksByBookId(bookId);
 
 
         verify(stockTypeRepository, times(1)).findByBookId(bookId);
@@ -55,17 +57,17 @@ class StockTypeServiceTest {
     @Test
     void createStock_StockCreated_ReturnsCreatedStock() {
 
-        StockType newStock = new StockType();
+        StockTypeDto newStock = new StockTypeDto();
         StockType savedStock = new StockType();
 
 
-        when(stockTypeRepository.save(newStock)).thenReturn(savedStock);
+        when(stockTypeRepository.save(StockTypeMapper.stockTypeMapperDtoToEntity(newStock))).thenReturn(savedStock);
 
 
         StockType result = stockTypeService.createStock(newStock);
 
 
-        verify(stockTypeRepository, times(1)).save(newStock);
+        verify(stockTypeRepository, times(1)).save(StockTypeMapper.stockTypeMapperDtoToEntity(newStock));
         verifyNoMoreInteractions(stockTypeRepository);
 
         assertEquals(savedStock, result);
@@ -112,7 +114,7 @@ class StockTypeServiceTest {
     void modifyStockById_StockExists_SuccessfullyUpdated() {
 
         int id = 1;
-        StockType modifiedStock = new StockType();
+        StockTypeDto modifiedStock = new StockTypeDto();
 
 
         when(stockTypeRepository.findById(id)).thenReturn(Optional.of(new StockType()));
@@ -132,7 +134,7 @@ class StockTypeServiceTest {
     void modifyStockById_StockDoesNotExist_ReturnsErrorMessage() {
 
         int id = 1;
-        StockType modifiedStock = new StockType();
+        StockTypeDto modifiedStock = new StockTypeDto();
 
 
         when(stockTypeRepository.findById(id)).thenReturn(Optional.empty());

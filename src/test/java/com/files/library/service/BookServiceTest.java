@@ -1,9 +1,11 @@
 package com.files.library.service;
 
+import com.files.library.model.BookDto;
 import com.files.library.model.domain.Book;
 import com.files.library.model.domain.StockType;
 import com.files.library.repository.BookRepository;
 import com.files.library.service.impl.BookServiceImpl;
+import com.files.library.util.BookMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +43,7 @@ class BookServiceTest {
 
         when(bookRepository.findAll()).thenReturn(expectedBooks);
 
-        List<Book> actualBooks = bookService.getAllBooks();
+        List<BookDto> actualBooks = bookService.getAllBooks();
 
         assertEquals(expectedBooks, actualBooks);
     }
@@ -54,7 +56,7 @@ class BookServiceTest {
 
         when(bookRepository.findByTitleContainingIgnoreCase(title)).thenReturn(expectedBooks);
 
-        List<Book> actualBooks = bookService.getBookByTitle(title);
+        List<BookDto> actualBooks = bookService.getBookByTitle(title);
 
         assertEquals(expectedBooks, actualBooks);
     }
@@ -67,17 +69,17 @@ class BookServiceTest {
 
         when(bookRepository.findById(id)).thenReturn(Optional.of(expectedBook));
 
-        Book actualBook = bookService.getBookById(id);
+        BookDto actualBook = bookService.getBookById(id);
 
         assertEquals(expectedBook, actualBook);
     }
 
     @Test
     void createBook() {
-        Book bookToCreate = new Book();
+        BookDto bookToCreate = new BookDto();
 
 
-        when(bookRepository.save(bookToCreate)).thenReturn(bookToCreate);
+        when(bookRepository.save(BookMapper.BookMapperDtoToEntity(bookToCreate))).thenReturn(BookMapper.BookMapperDtoToEntity(bookToCreate));
 
         Book createdBook = bookService.createBook(bookToCreate);
 

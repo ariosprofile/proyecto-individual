@@ -1,12 +1,20 @@
 package com.files.library.service.impl;
 
+import com.files.library.model.BookDto;
+import com.files.library.model.LibraryUserDto;
+import com.files.library.model.domain.Book;
 import com.files.library.model.domain.Lease;
 import com.files.library.model.domain.LibraryUser;
 import com.files.library.repository.LibraryUserRepository;
 import com.files.library.service.LibraryUserService;
+import com.files.library.util.BookMapper;
+import com.files.library.util.LeaseMapper;
+import com.files.library.util.LibraryUserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,19 +25,30 @@ public class LibraryUserServiceImpl implements LibraryUserService {
     private final LibraryUserRepository libraryUserRepository;
 
     @Override
-    public List<LibraryUser> getAllUsers() {
-        return libraryUserRepository.findAll();
+    public List<LibraryUserDto> getAllUsers() {
+
+        List<LibraryUserDto> libraryUserDtos = new ArrayList<>();
+
+        for (LibraryUser entityLibraryUser: libraryUserRepository.findAll()) {
+            libraryUserDtos.add(LibraryUserMapper.libraryUserMapperEntityToDto(entityLibraryUser));
+        }
+        return libraryUserDtos;
     }
 
     @Override
-    public LibraryUser getUserById(Integer id) {
+    public LibraryUserDto getUserById(Integer id) {
         Optional<LibraryUser> user = libraryUserRepository.findById(id);
-        return user.orElse(null);
+
+        if (user.isPresent()){
+            return LibraryUserMapper.libraryUserMapperEntityToDto(user.get());
+        } else {
+            throw new EntityNotFoundException("User with id " + id + " does not exists in our DB.");
+        }
     }
 
     @Override
-    public LibraryUser createUser(LibraryUser user) {
-        return libraryUserRepository.save(user);
+    public LibraryUser createUser(LibraryUserDto userDto) {
+        return libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(userDto));
     }
 
     @Override
@@ -45,18 +64,18 @@ public class LibraryUserServiceImpl implements LibraryUserService {
     }
 
     @Override
-    public String modifyUserById(Integer id, LibraryUser libraryUser) {
+    public String modifyUserById(Integer id, LibraryUserDto libraryUserDto) {
         Optional<LibraryUser> user = libraryUserRepository.findById(id);
 
         if (user.isEmpty()){
             return "User with id " + id + " does not exists in our DB. Please, type a existent id.";
         } else {
             LibraryUser existingUser = user.get();
-            existingUser.setUserName(libraryUser.getUserName());
-            existingUser.setAddress(libraryUser.getAddress());
-            existingUser.setEmail(libraryUser.getEmail());
-            existingUser.setPassword(libraryUser.getPassword());
-            existingUser.setLeases(libraryUser.getLeases());
+            existingUser.setUserName(libraryUserDto.getUserName());
+            existingUser.setAddress(libraryUserDto.getAddress());
+            existingUser.setEmail(libraryUserDto.getEmail());
+            existingUser.setPassword(libraryUserDto.getPassword());
+            existingUser.setLeases(LeaseMapper.mapLeasesFromDtoToEntity(libraryUserDto.getLeasedBooks()));
             libraryUserRepository.save(existingUser);
             return "User with id " + id + " successfully updated.";
         }

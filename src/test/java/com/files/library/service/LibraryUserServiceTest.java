@@ -1,9 +1,12 @@
 package com.files.library.service;
 
+import com.files.library.model.LeaseDto;
+import com.files.library.model.LibraryUserDto;
 import com.files.library.model.domain.Lease;
 import com.files.library.model.domain.LibraryUser;
 import com.files.library.repository.LibraryUserRepository;
 import com.files.library.service.impl.LibraryUserServiceImpl;
+import com.files.library.util.LibraryUserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,7 +46,7 @@ class LibraryUserServiceTest {
         when(libraryUserRepository.findAll()).thenReturn(users);
 
         // Act
-        List<LibraryUser> result = libraryUserService.getAllUsers();
+        List<LibraryUserDto> result = libraryUserService.getAllUsers();
 
         // Assert
         verify(libraryUserRepository, times(1)).findAll();
@@ -63,7 +66,7 @@ class LibraryUserServiceTest {
         when(libraryUserRepository.findById(id)).thenReturn(Optional.of(expectedUser));
 
         // Act
-        LibraryUser result = libraryUserService.getUserById(id);
+        LibraryUserDto result = libraryUserService.getUserById(id);
 
         // Assert
         verify(libraryUserRepository, times(1)).findById(id);
@@ -81,7 +84,7 @@ class LibraryUserServiceTest {
         when(libraryUserRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act
-        LibraryUser result = libraryUserService.getUserById(id);
+        LibraryUserDto result = libraryUserService.getUserById(id);
 
         // Assert
         verify(libraryUserRepository, times(1)).findById(id);
@@ -93,17 +96,17 @@ class LibraryUserServiceTest {
     @Test
     void createUser_UserCreated_ReturnsCreatedUser() {
         // Arrange
-        LibraryUser newUser = new LibraryUser();
+        LibraryUserDto newUser = new LibraryUserDto();
         LibraryUser savedUser = new LibraryUser();
 
         // Mock para simular que el usuario ha sido guardado correctamente en la base de datos
-        when(libraryUserRepository.save(newUser)).thenReturn(savedUser);
+        when(libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(newUser))).thenReturn(savedUser);
 
         // Act
         LibraryUser result = libraryUserService.createUser(newUser);
 
         // Assert
-        verify(libraryUserRepository, times(1)).save(newUser);
+        verify(libraryUserRepository, times(1)).save(LibraryUserMapper.libraryUserMapperDtoToEntity(newUser));
         verifyNoMoreInteractions(libraryUserRepository);
 
         assertEquals(savedUser, result);
@@ -150,16 +153,16 @@ class LibraryUserServiceTest {
     void modifyUserById_UserExists_SuccessfullyUpdated() {
         // Arrange
         int id = 1;
-        LibraryUser libraryUser = new LibraryUser();
+        LibraryUserDto libraryUser = new LibraryUserDto();
         libraryUser.setUserName("UpdatedUserName");
         libraryUser.setEmail("updated@example.com");
         libraryUser.setPassword("updatedPassword");
         libraryUser.setAddress("UpdatedAddress");
 
-        List<Lease> newLeases = new ArrayList<>();
-        newLeases.add(new Lease());
-        newLeases.add(new Lease());
-        libraryUser.setLeases(newLeases);
+        List<LeaseDto> newLeases = new ArrayList<>();
+        newLeases.add(new LeaseDto());
+        newLeases.add(new LeaseDto());
+        libraryUser.setLeasedBooks(newLeases);
 
         LibraryUser existingUser = new LibraryUser();
         existingUser.setId(id);
@@ -182,7 +185,7 @@ class LibraryUserServiceTest {
     void modifyUserById_UserDoesNotExist_ReturnsErrorMessage() {
         // Arrange
         int id = 1;
-        LibraryUser libraryUser = new LibraryUser();
+        LibraryUserDto libraryUser = new LibraryUserDto();
         libraryUser.setUserName("UpdatedUserName");
         libraryUser.setEmail("updated@example.com");
         libraryUser.setPassword("updatedPassword");

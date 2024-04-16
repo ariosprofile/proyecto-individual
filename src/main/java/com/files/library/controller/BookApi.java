@@ -1,5 +1,6 @@
 package com.files.library.controller;
 
+import com.files.library.model.BookDto;
 import com.files.library.model.domain.Book;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,16 +10,16 @@ import java.util.List;
 public interface BookApi {
 
     @GetMapping
-    List<Book> getAllBooks();
+    List<BookDto> getAllBooks();
 
     @GetMapping("/title/{title}")
-    List<Book> getBookByTitle(@PathVariable String title);
+    List<BookDto> getBookByTitle(@PathVariable String title);
 
     @GetMapping("/{id}")
-    Book getBookById(@PathVariable Integer id);
+    BookDto getBookById(@PathVariable Integer id);
 
     @PostMapping
-    Book createBook(@RequestBody Book book);
+    Book createBook(@RequestBody BookDto bookDto);
 
     @DeleteMapping("/{id}")
     String deleteBook(@PathVariable Integer id);

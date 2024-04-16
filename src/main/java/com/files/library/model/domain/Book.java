@@ -16,13 +16,9 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-
     private String title;
-
     private String author;
-
     private String genre;
-
     private String synopsis;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

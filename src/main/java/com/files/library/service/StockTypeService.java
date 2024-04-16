@@ -1,13 +1,14 @@
 package com.files.library.service;
 
+import com.files.library.model.StockTypeDto;
 import com.files.library.model.domain.StockType;
 
 import java.util.List;
 
 public interface StockTypeService {
 
-    List<StockType> getStocksByBookId(Integer id);
-    StockType createStock(StockType stockType);
+    List<StockTypeDto> getStocksByBookId(Integer id);
+    StockType createStock(StockTypeDto stockTypeDto);
     String deleteStockById(Integer id);
-    String modifyStockById(Integer id, StockType stockType);
+    String modifyStockById(Integer id, StockTypeDto stockTypeDto);
 }
