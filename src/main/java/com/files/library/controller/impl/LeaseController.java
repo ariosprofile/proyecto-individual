@@ -25,7 +25,7 @@ public class LeaseController implements LeaseApi {
     }
 
     @Override
-    public Lease createNewLease(LeaseDto leaseDto) {
+    public LeaseDto createNewLease(LeaseDto leaseDto) {
         return leaseService.createNewLease(leaseDto);
     }
 

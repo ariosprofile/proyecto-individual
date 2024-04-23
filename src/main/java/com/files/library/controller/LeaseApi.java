@@ -16,7 +16,7 @@ public interface LeaseApi {
     List<LeaseDto> getLeasesByStockId(@PathVariable Integer id);
 
     @PostMapping
-    Lease createNewLease(@RequestBody LeaseDto leaseDto);
+    LeaseDto createNewLease(@RequestBody LeaseDto leaseDto);
 
     @DeleteMapping
     String deleteLeaseById(Integer id);

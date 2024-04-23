@@ -11,9 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 public class BookDto {
 
+    private Integer id;
     private String author;
     private String  genre;
     private String title;
     private String synopsis;
-    private List<StockTypeDto> stockTypes;
+    private List<Integer> stockTypesIds;
 }

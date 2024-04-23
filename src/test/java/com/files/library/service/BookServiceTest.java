@@ -101,17 +101,17 @@ class BookServiceTest {
     @Test
     void modifyBookById() {
         int id = 1;
-        Book modifiedBook = new Book();
+        BookDto modifiedBook = new BookDto();
         modifiedBook.setAuthor("Modified Author");
         modifiedBook.setGenre("Modified Genre");
         modifiedBook.setTitle("Modified Title");
         modifiedBook.setSynopsis("Modified Synopsis");
 
 
-        List<StockType> modifiedStockTypes = new ArrayList<>();
-        modifiedStockTypes.add(new StockType());
-        modifiedStockTypes.add(new StockType());
-        modifiedBook.setStockTypes(modifiedStockTypes);
+        List<Integer> modifiedStockTypes = new ArrayList<>();
+        modifiedStockTypes.add(1);
+        modifiedStockTypes.add(2);
+        modifiedBook.setStockTypesIds(modifiedStockTypes);
 
         Book existingBook = new Book();
         existingBook.setId(id);

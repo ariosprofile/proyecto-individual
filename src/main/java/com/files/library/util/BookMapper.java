@@ -12,11 +12,12 @@ public class BookMapper {
 
     public static BookDto BookMapperEntityToDto(Book book){
         return BookDto.builder()
+                .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .genre(book.getGenre())
                 .synopsis(book.getSynopsis())
-                .stockTypes(StockTypeMapper.mapStockTypesFromEntityToDto(book.getStockTypes()))
+                .stockTypesIds(StockTypeMapper.mapStockTypesFromEntityToDto(book.getStockTypes()))
                 .build();
     }
 
@@ -26,7 +27,6 @@ public class BookMapper {
                 .author(bookDto.getAuthor())
                 .genre(bookDto.getGenre())
                 .synopsis(bookDto.getSynopsis())
-                .stockTypes(StockTypeMapper.mapStockTypesFromDtoToEntity(bookDto.getStockTypes()))
                 .build();
     }
 }

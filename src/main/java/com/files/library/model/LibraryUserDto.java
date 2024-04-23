@@ -11,9 +11,10 @@ import java.util.List;
 @AllArgsConstructor
 public class LibraryUserDto {
 
+    private Integer id;
     private String address;
     private String email;
     private String password;
     private String userName;
-    private List<LeaseDto> leasedBooks;
+    private List<Integer> leasedBooksIds;
 }

@@ -9,7 +9,7 @@ public interface LeaseService {
 
     List<LeaseDto> getLeasesByUserId(Integer id);
     List<LeaseDto> getLeasesByStockId(Integer id);
-    Lease createNewLease(LeaseDto leaseDto);
+    LeaseDto createNewLease(LeaseDto leaseDto);
     String deleteLeaseById(Integer id);
     String modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto);
 }

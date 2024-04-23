@@ -25,5 +25,5 @@ public interface BookApi {
     String deleteBook(@PathVariable Integer id);
 
     @PutMapping("/{id}")
-    String modifyBook(@PathVariable Integer id, @RequestBody Book book);
+    String modifyBook(@PathVariable Integer id, @RequestBody BookDto book);
 }

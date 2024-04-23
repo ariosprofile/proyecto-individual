@@ -9,8 +9,8 @@ import java.util.List;
 @RequestMapping(value = "/stockType")
 public interface StockTypeApi {
 
-    @GetMapping
-    List<StockTypeDto> getStockTypesByBookId(Integer id);
+    @GetMapping("/{id}")
+    List<StockTypeDto> getStockTypesByBookId(@PathVariable Integer id);
     @PostMapping
     StockType createNewStockType(@RequestBody StockTypeDto stockTypeDto);
     @DeleteMapping

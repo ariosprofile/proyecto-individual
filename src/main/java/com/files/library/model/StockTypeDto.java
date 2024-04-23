@@ -11,9 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 public class StockTypeDto {
 
+    private Integer id;
     private Integer stock;
     private Integer type;
     private Double costPerDay;
-    private BookDto bookDto;
-    private List<LeaseDto> leases;
+    private Integer bookId;
+    private List<Integer> leasesIds;
 }

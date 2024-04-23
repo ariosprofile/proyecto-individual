@@ -14,7 +14,7 @@ public class LeaseDto {
     private LocalDate leaseDate;
     private LocalDate returnDate;
     private Double totalCost;
-    private LibraryUserDto libraryUserDto;
-    private StockTypeDto stockTypeDto;
+    private Integer libraryUserId;
+    private Integer stockTypeId;
 
 }

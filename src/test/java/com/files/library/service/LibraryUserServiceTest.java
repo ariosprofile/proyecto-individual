@@ -159,10 +159,10 @@ class LibraryUserServiceTest {
         libraryUser.setPassword("updatedPassword");
         libraryUser.setAddress("UpdatedAddress");
 
-        List<LeaseDto> newLeases = new ArrayList<>();
-        newLeases.add(new LeaseDto());
-        newLeases.add(new LeaseDto());
-        libraryUser.setLeasedBooks(newLeases);
+        List<Integer> newLeases = new ArrayList<>();
+        newLeases.add(1);
+        newLeases.add(1);
+        libraryUser.setLeasedBooksIds(newLeases);
 
         LibraryUser existingUser = new LibraryUser();
         existingUser.setId(id);

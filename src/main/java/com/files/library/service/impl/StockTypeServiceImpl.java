@@ -2,14 +2,19 @@ package com.files.library.service.impl;
 
 import com.files.library.model.LibraryUserDto;
 import com.files.library.model.StockTypeDto;
+import com.files.library.model.domain.Book;
+import com.files.library.model.domain.Lease;
 import com.files.library.model.domain.LibraryUser;
 import com.files.library.model.domain.StockType;
+import com.files.library.repository.BookRepository;
+import com.files.library.repository.LeaseRepository;
 import com.files.library.repository.StockTypeRepository;
 import com.files.library.service.StockTypeService;
 import com.files.library.util.BookMapper;
 import com.files.library.util.LeaseMapper;
 import com.files.library.util.LibraryUserMapper;
 import com.files.library.util.StockTypeMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,8 @@ import java.util.Optional;
 public class StockTypeServiceImpl implements StockTypeService {
 
     private final StockTypeRepository stockTypeRepository;
+    private final BookRepository bookRepository;
+    private final LeaseRepository leaseRepository;
 
     @Override
     public List<StockTypeDto> getStocksByBookId(Integer id) {
@@ -37,7 +44,15 @@ public class StockTypeServiceImpl implements StockTypeService {
 
     @Override
     public StockType createStock(StockTypeDto stockTypeDto) {
-        return stockTypeRepository.save(StockTypeMapper.stockTypeMapperDtoToEntity(stockTypeDto));
+        Optional<Book> book = bookRepository.findById(stockTypeDto.getBookId());
+
+        if (book.isPresent()){
+            StockType stockType = StockTypeMapper.stockTypeMapperDtoToEntity(stockTypeDto);
+            stockType.setBook(book.get());
+            return stockTypeRepository.save(stockType);
+        } else {
+            throw new EntityNotFoundException("Book not found to associate with id: " + stockTypeDto.getBookId());
+        }
     }
 
     @Override
@@ -61,14 +76,29 @@ public class StockTypeServiceImpl implements StockTypeService {
         if (stock.isEmpty()){
             return "Stock with id " + id + " does not exists in our DB. Please, type a existent id.";
         } else {
-            StockType existingStock = stock.get();
-            existingStock.setStock(stockTypeDto.getStock());
-            existingStock.setType(stockTypeDto.getType());
-            existingStock.setCostPerDay(stockTypeDto.getCostPerDay());
-            existingStock.setLeases(LeaseMapper.mapLeasesFromDtoToEntity(stockTypeDto.getLeases()));
-            existingStock.setBook(BookMapper.BookMapperDtoToEntity(stockTypeDto.getBookDto()));
-            stockTypeRepository.save(existingStock);
-            return "Stock with id " + id + " successfully updated.";
+            Optional<Book> book = bookRepository.findById(stockTypeDto.getBookId());
+            if (book.isPresent()) {
+
+                StockType existingStock = stock.get();
+                existingStock.setStock(stockTypeDto.getStock());
+                existingStock.setType(stockTypeDto.getType());
+                existingStock.setCostPerDay(stockTypeDto.getCostPerDay());
+
+                List<Lease> leases = new ArrayList<>();
+
+                for (Integer leaseId : stockTypeDto.getLeasesIds()) {
+                    Optional<Lease> lease = leaseRepository.findById(leaseId);
+
+                    leases.add(lease.orElseThrow());
+                }
+
+                existingStock.setLeases(leases);
+                existingStock.setBook(book.get());
+                stockTypeRepository.save(existingStock);
+                return "Stock with id " + id + " successfully updated.";
+            } else {
+                return "Book not found with id: " + stockTypeDto.getBookId() + ", to associate.";
+            }
         }
     }
 }

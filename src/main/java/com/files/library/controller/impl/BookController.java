@@ -42,7 +42,7 @@ public class BookController implements BookApi {
     }
 
     @Override
-    public String modifyBook(Integer id, Book book) {
+    public String modifyBook(Integer id, BookDto book) {
         return bookService.modifyBookById(id, book);
     }
 }

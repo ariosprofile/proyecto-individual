@@ -5,6 +5,8 @@ import com.files.library.model.LibraryUserDto;
 import com.files.library.model.domain.Book;
 import com.files.library.model.domain.Lease;
 import com.files.library.model.domain.LibraryUser;
+import com.files.library.model.domain.StockType;
+import com.files.library.repository.LeaseRepository;
 import com.files.library.repository.LibraryUserRepository;
 import com.files.library.service.LibraryUserService;
 import com.files.library.util.BookMapper;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class LibraryUserServiceImpl implements LibraryUserService {
 
     private final LibraryUserRepository libraryUserRepository;
+    private final LeaseRepository leaseRepository;
 
     @Override
     public List<LibraryUserDto> getAllUsers() {
@@ -75,7 +78,16 @@ public class LibraryUserServiceImpl implements LibraryUserService {
             existingUser.setAddress(libraryUserDto.getAddress());
             existingUser.setEmail(libraryUserDto.getEmail());
             existingUser.setPassword(libraryUserDto.getPassword());
-            existingUser.setLeases(LeaseMapper.mapLeasesFromDtoToEntity(libraryUserDto.getLeasedBooks()));
+
+            List<Lease> leases = new ArrayList<>();
+
+            for (Integer leaseId : libraryUserDto.getLeasedBooksIds()) {
+                Optional<Lease> lease = leaseRepository.findById(leaseId);
+
+                leases.add(lease.orElseThrow());
+            }
+
+            existingUser.setLeases(leases);
             libraryUserRepository.save(existingUser);
             return "User with id " + id + " successfully updated.";
         }

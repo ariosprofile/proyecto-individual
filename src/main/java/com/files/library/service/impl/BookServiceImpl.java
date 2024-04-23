@@ -1,9 +1,13 @@
 package com.files.library.service.impl;
 
 import com.files.library.model.BookDto;
+import com.files.library.model.LeaseDto;
+import com.files.library.model.StockTypeDto;
 import com.files.library.model.domain.Book;
 import com.files.library.model.domain.Lease;
+import com.files.library.model.domain.StockType;
 import com.files.library.repository.BookRepository;
+import com.files.library.repository.StockTypeRepository;
 import com.files.library.service.BookService;
 import com.files.library.util.BookMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,6 +23,7 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final StockTypeRepository stockTypeRepository;
 
     @Override
     public List<BookDto> getAllBooks() {
@@ -71,7 +76,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String modifyBookById(Integer id, Book modifiedBook) {
+    public String modifyBookById(Integer id, BookDto modifiedBook) {
         Optional<Book> optionalBook = bookRepository.findById(id);
 
         if (optionalBook.isPresent()) {
@@ -80,7 +85,16 @@ public class BookServiceImpl implements BookService {
             book.setGenre(modifiedBook.getGenre());
             book.setTitle(modifiedBook.getTitle());
             book.setSynopsis(modifiedBook.getSynopsis());
-            book.setStockTypes(modifiedBook.getStockTypes());
+
+            List<StockType> stockTypes = new ArrayList<>();
+
+            for (Integer stockTypeId : modifiedBook.getStockTypesIds()) {
+                Optional<StockType> stockType = stockTypeRepository.findById(stockTypeId);
+
+                stockTypes.add(stockType.orElseThrow());
+            }
+
+            book.setStockTypes(stockTypes);
             bookRepository.save(book);
             return "Book with id " + id + " successfully updated.";
         } else {

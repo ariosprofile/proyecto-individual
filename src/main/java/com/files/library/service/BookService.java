@@ -13,5 +13,5 @@ public interface BookService {
     BookDto getBookById(Integer id);
     Book createBook(BookDto bookdDto);
     String deleteBookById(Integer id);
-    String modifyBookById(Integer id, Book modifiedBook);
+    String modifyBookById(Integer id, BookDto modifiedBook);
 }

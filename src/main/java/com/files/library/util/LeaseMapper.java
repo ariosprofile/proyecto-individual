@@ -17,8 +17,8 @@ public class LeaseMapper {
                 .totalCost(lease.getTotalCost())
                 .leaseDate(lease.getLeaseDate())
                 .returnDate(lease.getReturnDate())
-                .stockTypeDto(StockTypeMapper.stockTypeMapperEntityToDto(lease.getStockType()))
-                .libraryUserDto(LibraryUserMapper.libraryUserMapperEntityToDto(lease.getUser()))
+                .stockTypeId(lease.getStockType().getId())
+                .libraryUserId(lease.getUser().getId())
                 .build();
     }
 
@@ -27,18 +27,16 @@ public class LeaseMapper {
                 .totalCost(leaseDto.getTotalCost())
                 .leaseDate(leaseDto.getLeaseDate())
                 .returnDate(leaseDto.getReturnDate())
-                .stockType(StockTypeMapper.stockTypeMapperDtoToEntity(leaseDto.getStockTypeDto()))
-                .user(LibraryUserMapper.libraryUserMapperDtoToEntity(leaseDto.getLibraryUserDto()))
                 .build();
     }
 
-    public static List<LeaseDto> mapLeasesFromEntityToDto(List<Lease> leases){
-        List<LeaseDto> leasesDtos = new ArrayList<>();
+    public static List<Integer> mapLeasesFromEntityToDto(List<Lease> leases){
+        List<Integer> leasesIds = new ArrayList<>();
 
         for (Lease entityLease : leases) {
-            leasesDtos.add(leaseMapperEntityToDto(entityLease));
+            leasesIds.add(entityLease.getId());
         }
-        return leasesDtos;
+        return leasesIds;
     }
 
     public static List<Lease> mapLeasesFromDtoToEntity(List<LeaseDto> leaseDtos){
