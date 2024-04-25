@@ -2,6 +2,7 @@ package com.files.library.controller;
 
 import com.files.library.model.LibraryUserDto;
 import com.files.library.model.domain.LibraryUser;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,17 +10,17 @@ import java.util.List;
 @RequestMapping(value = "/libraryUser")
 public interface LibraryUserApi {
     @GetMapping
-    List<LibraryUserDto> getAllUsers();
+    ResponseEntity<List<LibraryUserDto>> getAllUsers();
 
     @GetMapping("/{id}")
-    LibraryUserDto getLibraryUserById(Integer id);
+    ResponseEntity<LibraryUserDto> getLibraryUserById(Integer id);
 
     @PostMapping
-    LibraryUser createNewLibraryUser(@RequestBody LibraryUserDto libraryUserDto);
+    ResponseEntity<LibraryUserDto> createNewLibraryUser(@RequestBody LibraryUserDto libraryUserDto);
 
     @DeleteMapping
-    String deleteUserById(Integer id);
+    ResponseEntity<String> deleteUserById(Integer id);
 
-    @PutMapping
-    String modifyUserById(Integer id, @RequestBody LibraryUserDto userDto);
+    @PutMapping("/{id}")
+    ResponseEntity<String> modifyUserById(@PathVariable Integer id, @RequestBody LibraryUserDto userDto);
 }

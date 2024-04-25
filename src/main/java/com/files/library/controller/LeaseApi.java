@@ -2,6 +2,7 @@ package com.files.library.controller;
 
 import com.files.library.model.LeaseDto;
 import com.files.library.model.domain.Lease;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,17 +11,17 @@ import java.util.List;
 public interface LeaseApi {
 
     @GetMapping("/userId/{id}")
-    List<LeaseDto> getLeasesByUserId(@PathVariable Integer id);
+    ResponseEntity<List<LeaseDto>> getLeasesByUserId(@PathVariable Integer id);
 
     @GetMapping("/stockId/{id}")
-    List<LeaseDto> getLeasesByStockId(@PathVariable Integer id);
+    ResponseEntity<List<LeaseDto>> getLeasesByStockId(@PathVariable Integer id);
 
     @PostMapping
-    LeaseDto createNewLease(@RequestBody LeaseDto leaseDto);
+    ResponseEntity<LeaseDto> createNewLease(@RequestBody LeaseDto leaseDto);
 
     @DeleteMapping
-    String deleteLeaseById(Integer id);
+    ResponseEntity<String> deleteLeaseById(Integer id);
 
-    @PutMapping
-    String modifyLeaseById(Integer id, @RequestBody LeaseDto leaseDto);
+    @PutMapping("/{id}")
+    ResponseEntity<String> modifyLeaseById(@PathVariable Integer id, @RequestBody LeaseDto leaseDto);
 }

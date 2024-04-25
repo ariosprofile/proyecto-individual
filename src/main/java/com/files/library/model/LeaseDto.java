@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class LeaseDto {
 
+    private Integer id;
     private LocalDate leaseDate;
     private LocalDate returnDate;
     private Double totalCost;

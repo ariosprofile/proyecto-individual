@@ -102,8 +102,9 @@ public class LeaseServiceImpl implements LeaseService {
                 leaseRepository.save(existingLease);
                 return "Lease with id " + id + " successfully updated.";
             } else {
-                return "Library user or stock type not found with ids: "
+                return "Library user or stock type not found with ids "
                         + modifiedLeaseDto.getLibraryUserId()
+                        + ", "
                         + modifiedLeaseDto.getStockTypeId()
                         + " , respectively, to associate.";
             }

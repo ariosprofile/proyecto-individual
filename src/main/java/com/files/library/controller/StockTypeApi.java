@@ -2,6 +2,7 @@ package com.files.library.controller;
 
 import com.files.library.model.StockTypeDto;
 import com.files.library.model.domain.StockType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.List;
 public interface StockTypeApi {
 
     @GetMapping("/{id}")
-    List<StockTypeDto> getStockTypesByBookId(@PathVariable Integer id);
+    ResponseEntity<List<StockTypeDto>> getStockTypesByBookId(@PathVariable Integer id);
     @PostMapping
-    StockType createNewStockType(@RequestBody StockTypeDto stockTypeDto);
+    ResponseEntity<StockTypeDto>  createNewStockType(@RequestBody StockTypeDto stockTypeDto);
     @DeleteMapping
-    String deleteStockTypeById(Integer id);
-    @PutMapping
-    String modifyExistingStockById(Integer id, @RequestBody StockTypeDto stockTypeDto);
+    ResponseEntity<String>  deleteStockTypeById(Integer id);
+    @PutMapping("/{id}")
+    ResponseEntity<String>  modifyExistingStockById(@PathVariable Integer id, @RequestBody StockTypeDto stockTypeDto);
 
 
 

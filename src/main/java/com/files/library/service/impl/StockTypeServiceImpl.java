@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,13 +44,13 @@ public class StockTypeServiceImpl implements StockTypeService {
     }
 
     @Override
-    public StockType createStock(StockTypeDto stockTypeDto) {
+    public StockTypeDto createStock(StockTypeDto stockTypeDto) {
         Optional<Book> book = bookRepository.findById(stockTypeDto.getBookId());
 
         if (book.isPresent()){
             StockType stockType = StockTypeMapper.stockTypeMapperDtoToEntity(stockTypeDto);
             stockType.setBook(book.get());
-            return stockTypeRepository.save(stockType);
+            return StockTypeMapper.stockTypeMapperEntityToDto(stockTypeRepository.save(stockType));
         } else {
             throw new EntityNotFoundException("Book not found to associate with id: " + stockTypeDto.getBookId());
         }
@@ -84,20 +85,25 @@ public class StockTypeServiceImpl implements StockTypeService {
                 existingStock.setType(stockTypeDto.getType());
                 existingStock.setCostPerDay(stockTypeDto.getCostPerDay());
 
-                List<Lease> leases = new ArrayList<>();
+                if (stockTypeDto.getLeasesIds() == null){
+                    existingStock.setLeases(Collections.emptyList());
+                } else {
+                    List<Lease> leases = new ArrayList<>();
 
-                for (Integer leaseId : stockTypeDto.getLeasesIds()) {
-                    Optional<Lease> lease = leaseRepository.findById(leaseId);
+                    for (Integer leaseId : stockTypeDto.getLeasesIds()) {
+                        Optional<Lease> lease = leaseRepository.findById(leaseId);
 
-                    leases.add(lease.orElseThrow());
+                        leases.add(lease.orElseThrow());
+                    }
+
+                    existingStock.setLeases(leases);
                 }
 
-                existingStock.setLeases(leases);
                 existingStock.setBook(book.get());
                 stockTypeRepository.save(existingStock);
                 return "Stock with id " + id + " successfully updated.";
             } else {
-                return "Book not found with id: " + stockTypeDto.getBookId() + ", to associate.";
+                return "Book not found with id " + stockTypeDto.getBookId() + " to associate.";
             }
         }
     }

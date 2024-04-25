@@ -10,8 +10,10 @@ public interface BookService {
 
     List<BookDto> getAllBooks();
     List<BookDto> getBookByTitle(String title);
+    List<BookDto> getBooksByGenre(String genre);
+    List<BookDto> getBooksByAuthor(String author);
     BookDto getBookById(Integer id);
-    Book createBook(BookDto bookdDto);
+    BookDto createBook(BookDto bookDto);
     String deleteBookById(Integer id);
     String modifyBookById(Integer id, BookDto modifiedBook);
 }

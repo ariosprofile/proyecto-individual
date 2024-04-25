@@ -42,6 +42,11 @@ public class StockTypeMapper {
     }
 
     public static List<Integer> mapStockTypesFromEntityToDto(List<StockType> stockTypes) {
+
+        if (stockTypes == null){
+            return Collections.emptyList();
+        }
+
         List<Integer> stockTypesIds = new ArrayList<>();
 
         for (StockType entityStockType : stockTypes) {

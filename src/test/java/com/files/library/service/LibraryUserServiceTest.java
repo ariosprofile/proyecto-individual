@@ -103,7 +103,7 @@ class LibraryUserServiceTest {
         when(libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(newUser))).thenReturn(savedUser);
 
         // Act
-        LibraryUser result = libraryUserService.createUser(newUser);
+        LibraryUserDto result = libraryUserService.createUser(newUser);
 
         // Assert
         verify(libraryUserRepository, times(1)).save(LibraryUserMapper.libraryUserMapperDtoToEntity(newUser));

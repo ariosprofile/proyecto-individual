@@ -2,6 +2,8 @@ package com.files.library.controller;
 
 import com.files.library.model.BookDto;
 import com.files.library.model.domain.Book;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,20 +12,26 @@ import java.util.List;
 public interface BookApi {
 
     @GetMapping
-    List<BookDto> getAllBooks();
+    ResponseEntity<List<BookDto>> getAllBooks();
 
     @GetMapping("/title/{title}")
-    List<BookDto> getBookByTitle(@PathVariable String title);
+    ResponseEntity<List<BookDto>> getBookByTitle(@PathVariable String title);
+
+    @GetMapping("/genre/{genre}")
+    ResponseEntity<List<BookDto>> getBooksByGenre(@PathVariable String genre);
+
+    @GetMapping("/author/{author}")
+    ResponseEntity<List<BookDto>> getBooksByAuthor(@PathVariable String author);
 
     @GetMapping("/{id}")
-    BookDto getBookById(@PathVariable Integer id);
+    ResponseEntity<BookDto> getBookById(@PathVariable Integer id);
 
     @PostMapping
-    Book createBook(@RequestBody BookDto bookDto);
+    ResponseEntity<BookDto> createBook(@RequestBody BookDto bookDto);
 
     @DeleteMapping("/{id}")
-    String deleteBook(@PathVariable Integer id);
+    ResponseEntity<String> deleteBook(@PathVariable Integer id);
 
     @PutMapping("/{id}")
-    String modifyBook(@PathVariable Integer id, @RequestBody BookDto book);
+    ResponseEntity<String> modifyBook(@PathVariable Integer id, @RequestBody BookDto book);
 }

@@ -64,7 +64,7 @@ class StockTypeServiceTest {
         when(stockTypeRepository.save(StockTypeMapper.stockTypeMapperDtoToEntity(newStock))).thenReturn(savedStock);
 
 
-        StockType result = stockTypeService.createStock(newStock);
+        StockTypeDto result = stockTypeService.createStock(newStock);
 
 
         verify(stockTypeRepository, times(1)).save(StockTypeMapper.stockTypeMapperDtoToEntity(newStock));

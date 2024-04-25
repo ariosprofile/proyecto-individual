@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,32 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getBookByTitle(String title) {
 
-        List<BookDto> bookDtos = new ArrayList<>();
+        List<BookDto> booksDto = new ArrayList<>();
 
         for (Book entityBook : bookRepository.findByTitleContainingIgnoreCase(title)) {
-            bookDtos.add(BookMapper.BookMapperEntityToDto(entityBook));
+            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
         }
-        return bookDtos;
+        return booksDto;
+    }
+
+    @Override
+    public List<BookDto> getBooksByGenre(String genre) {
+        List<BookDto> booksDto = new ArrayList<>();
+
+        for (Book entityBook : bookRepository.findByGenreContainingIgnoreCase(genre)) {
+            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
+        }
+        return booksDto;
+    }
+
+    @Override
+    public List<BookDto> getBooksByAuthor(String author) {
+        List<BookDto> booksDto = new ArrayList<>();
+
+        for (Book entityBook : bookRepository.findByAuthorContainingIgnoreCase(author)) {
+            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
+        }
+        return booksDto;
     }
 
     @Override
@@ -59,8 +80,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(BookDto bookDto) {
-        return bookRepository.save(BookMapper.BookMapperDtoToEntity(bookDto));
+    public BookDto createBook(BookDto bookDto) {
+        return BookMapper.BookMapperEntityToDto(bookRepository.save(BookMapper.BookMapperDtoToEntity(bookDto)));
     }
 
     @Override
@@ -86,15 +107,20 @@ public class BookServiceImpl implements BookService {
             book.setTitle(modifiedBook.getTitle());
             book.setSynopsis(modifiedBook.getSynopsis());
 
-            List<StockType> stockTypes = new ArrayList<>();
+            if (modifiedBook.getStockTypesIds() == null){
+                book.setStockTypes(Collections.emptyList());
+            } else {
+                List<StockType> stockTypes = new ArrayList<>();
 
-            for (Integer stockTypeId : modifiedBook.getStockTypesIds()) {
-                Optional<StockType> stockType = stockTypeRepository.findById(stockTypeId);
+                for (Integer stockTypeId : modifiedBook.getStockTypesIds()) {
+                    Optional<StockType> stockType = stockTypeRepository.findById(stockTypeId);
 
-                stockTypes.add(stockType.orElseThrow());
+                    stockTypes.add(stockType.orElseThrow());
+                }
+
+                book.setStockTypes(stockTypes);
             }
 
-            book.setStockTypes(stockTypes);
             bookRepository.save(book);
             return "Book with id " + id + " successfully updated.";
         } else {

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,8 +51,8 @@ public class LibraryUserServiceImpl implements LibraryUserService {
     }
 
     @Override
-    public LibraryUser createUser(LibraryUserDto userDto) {
-        return libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(userDto));
+    public LibraryUserDto createUser(LibraryUserDto userDto) {
+        return LibraryUserMapper.libraryUserMapperEntityToDto(libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(userDto)));
     }
 
     @Override
@@ -79,15 +80,20 @@ public class LibraryUserServiceImpl implements LibraryUserService {
             existingUser.setEmail(libraryUserDto.getEmail());
             existingUser.setPassword(libraryUserDto.getPassword());
 
-            List<Lease> leases = new ArrayList<>();
+            if (libraryUserDto.getLeasedBooksIds() == null){
+                existingUser.setLeases(Collections.emptyList());
+            } else {
+                List<Lease> leases = new ArrayList<>();
 
-            for (Integer leaseId : libraryUserDto.getLeasedBooksIds()) {
-                Optional<Lease> lease = leaseRepository.findById(leaseId);
+                for (Integer leaseId : libraryUserDto.getLeasedBooksIds()) {
+                    Optional<Lease> lease = leaseRepository.findById(leaseId);
 
-                leases.add(lease.orElseThrow());
+                    leases.add(lease.orElseThrow());
+                }
+
+                existingUser.setLeases(leases);
             }
 
-            existingUser.setLeases(leases);
             libraryUserRepository.save(existingUser);
             return "User with id " + id + " successfully updated.";
         }

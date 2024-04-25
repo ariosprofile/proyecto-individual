@@ -8,12 +8,14 @@ import com.files.library.model.domain.LibraryUser;
 import com.files.library.model.domain.StockType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LeaseMapper {
 
     public static LeaseDto leaseMapperEntityToDto(Lease lease){
         return LeaseDto.builder()
+                .id(lease.getId())
                 .totalCost(lease.getTotalCost())
                 .leaseDate(lease.getLeaseDate())
                 .returnDate(lease.getReturnDate())
@@ -31,6 +33,11 @@ public class LeaseMapper {
     }
 
     public static List<Integer> mapLeasesFromEntityToDto(List<Lease> leases){
+
+        if(leases == null){
+            return Collections.emptyList();
+        }
+
         List<Integer> leasesIds = new ArrayList<>();
 
         for (Lease entityLease : leases) {

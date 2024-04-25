@@ -81,7 +81,7 @@ class BookServiceTest {
 
         when(bookRepository.save(BookMapper.BookMapperDtoToEntity(bookToCreate))).thenReturn(BookMapper.BookMapperDtoToEntity(bookToCreate));
 
-        Book createdBook = bookService.createBook(bookToCreate);
+        BookDto createdBook = bookService.createBook(bookToCreate);
 
         assertEquals(bookToCreate, createdBook);
     }

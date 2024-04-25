@@ -8,7 +8,7 @@ import java.util.List;
 public interface StockTypeService {
 
     List<StockTypeDto> getStocksByBookId(Integer id);
-    StockType createStock(StockTypeDto stockTypeDto);
+    StockTypeDto createStock(StockTypeDto stockTypeDto);
     String deleteStockById(Integer id);
     String modifyStockById(Integer id, StockTypeDto stockTypeDto);
 }
