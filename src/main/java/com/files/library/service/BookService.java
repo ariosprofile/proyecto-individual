@@ -14,6 +14,6 @@ public interface BookService {
     List<BookDto> getBooksByAuthor(String author);
     BookDto getBookById(Integer id);
     BookDto createBook(BookDto bookDto);
-    String deleteBookById(Integer id);
-    String modifyBookById(Integer id, BookDto modifiedBook);
+    void deleteBookById(Integer id);
+    void modifyBookById(Integer id, BookDto modifiedBook);
 }

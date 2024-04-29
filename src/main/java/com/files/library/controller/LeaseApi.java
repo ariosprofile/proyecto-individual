@@ -20,8 +20,8 @@ public interface LeaseApi {
     ResponseEntity<LeaseDto> createNewLease(@RequestBody LeaseDto leaseDto);
 
     @DeleteMapping
-    ResponseEntity<String> deleteLeaseById(Integer id);
+    ResponseEntity<Void> deleteLeaseById(Integer id);
 
     @PutMapping("/{id}")
-    ResponseEntity<String> modifyLeaseById(@PathVariable Integer id, @RequestBody LeaseDto leaseDto);
+    ResponseEntity<Void> modifyLeaseById(@PathVariable Integer id, @RequestBody LeaseDto leaseDto);
 }

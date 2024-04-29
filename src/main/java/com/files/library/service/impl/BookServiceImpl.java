@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,50 +29,39 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllBooks() {
-
-        List<BookDto> bookDtos = new ArrayList<>();
-
-        for (Book entityBook : bookRepository.findAll()) {
-            bookDtos.add(BookMapper.BookMapperEntityToDto(entityBook));
-        }
-        return bookDtos;
+        return bookRepository.findAll()
+                .stream()
+                .map(BookMapper :: BookMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<BookDto> getBookByTitle(String title) {
-
-        List<BookDto> booksDto = new ArrayList<>();
-
-        for (Book entityBook : bookRepository.findByTitleContainingIgnoreCase(title)) {
-            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
-        }
-        return booksDto;
+        return bookRepository.findByTitleContainingIgnoreCase(title)
+                .stream()
+                .map(BookMapper :: BookMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<BookDto> getBooksByGenre(String genre) {
-        List<BookDto> booksDto = new ArrayList<>();
-
-        for (Book entityBook : bookRepository.findByGenreContainingIgnoreCase(genre)) {
-            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
-        }
-        return booksDto;
+        return bookRepository.findByGenreContainingIgnoreCase(genre)
+                .stream()
+                .map(BookMapper :: BookMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<BookDto> getBooksByAuthor(String author) {
-        List<BookDto> booksDto = new ArrayList<>();
-
-        for (Book entityBook : bookRepository.findByAuthorContainingIgnoreCase(author)) {
-            booksDto.add(BookMapper.BookMapperEntityToDto(entityBook));
-        }
-        return booksDto;
+        return bookRepository.findByAuthorContainingIgnoreCase(author)
+                .stream()
+                .map(BookMapper :: BookMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public BookDto getBookById(Integer id) {
         Optional<Book> book = bookRepository.findById(id);
-
         if (book.isPresent()){
             return BookMapper.BookMapperEntityToDto(book.get());
         } else {
@@ -85,19 +75,18 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteBookById(Integer id) {
+    public void deleteBookById(Integer id) {
         Optional<Book> book = bookRepository.findById(id);
 
         if (book.isEmpty()) {
-            return "Couldn't find the book with id: " + id;
+            throw new EntityNotFoundException("Couldn't find the book with id: " + id);
         } else {
             bookRepository.delete(book.get());
-            return "Book successfully deleted.";
         }
     }
 
     @Override
-    public String modifyBookById(Integer id, BookDto modifiedBook) {
+    public void modifyBookById(Integer id, BookDto modifiedBook) {
         Optional<Book> optionalBook = bookRepository.findById(id);
 
         if (optionalBook.isPresent()) {
@@ -122,9 +111,8 @@ public class BookServiceImpl implements BookService {
             }
 
             bookRepository.save(book);
-            return "Book with id " + id + " successfully updated.";
         } else {
-            return "Book with id " + id + " does not exist in our DB. Please, type an existent id.";
+            throw new EntityNotFoundException("Book with id " + id + " does not exist in our DB. Please, type an existent id.");
         }
     }
 }

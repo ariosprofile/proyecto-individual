@@ -22,36 +22,28 @@ public class LeaseController implements LeaseApi {
     @Override
     public ResponseEntity<List<LeaseDto>> getLeasesByUserId(Integer id) {
         List<LeaseDto> leasesDto = leaseService.getLeasesByUserId(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("User existing leases", Integer.toString(leasesDto.size()));
-        return new ResponseEntity<>(leasesDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(leasesDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<LeaseDto>> getLeasesByStockId(Integer id) {
         List<LeaseDto> leasesDto = leaseService.getLeasesByStockId(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Existing leases of this kind of stock", Integer.toString(leasesDto.size()));
-        return new ResponseEntity<>(leasesDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(leasesDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<LeaseDto> createNewLease(LeaseDto leaseDto) {
         LeaseDto newLease = leaseService.createNewLease(leaseDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Created id", newLease.getId().toString());
-        return new ResponseEntity<>(newLease, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(newLease, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<String> deleteLeaseById(Integer id) {
-        String deleteMessage = leaseService.deleteLeaseById(id);
-        return new ResponseEntity<>(deleteMessage, HttpStatus.OK);
+    public ResponseEntity<Void> deleteLeaseById(Integer id) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<String> modifyLeaseById(Integer id, LeaseDto leaseDto) {
-        String modifyMessage = leaseService.modifyLeaseById(id, leaseDto);
-        return new ResponseEntity<>(modifyMessage, HttpStatus.ACCEPTED);
+    public ResponseEntity<Void> modifyLeaseById(Integer id, LeaseDto leaseDto) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

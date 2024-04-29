@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,14 +34,10 @@ public class StockTypeServiceImpl implements StockTypeService {
 
     @Override
     public List<StockTypeDto> getStocksByBookId(Integer id) {
-
-        List<StockTypeDto> stockTypeDtos = new ArrayList<>();
-
-        for (StockType entityStockType: stockTypeRepository.findByBookId(id)) {
-            stockTypeDtos.add(StockTypeMapper.stockTypeMapperEntityToDto(entityStockType));
-        }
-
-        return stockTypeDtos;
+        return stockTypeRepository.findByBookId(id)
+                .stream()
+                .map(StockTypeMapper :: stockTypeMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -57,25 +54,22 @@ public class StockTypeServiceImpl implements StockTypeService {
     }
 
     @Override
-    public String deleteStockById(Integer id) {
-
+    public void deleteStockById(Integer id) {
         Optional<StockType> stock = stockTypeRepository.findById(id);
-
         if (stock.isEmpty()){
-            return "Stock with id " + id + "does not exists in our DB.";
+            throw new EntityNotFoundException("Stock with id " + id + "does not exists in our DB.");
         } else {
             stockTypeRepository.deleteById(id);
-            return "Stock successfully deleted";
         }
     }
 
     @Override
-    public String modifyStockById(Integer id, StockTypeDto stockTypeDto) {
+    public void modifyStockById(Integer id, StockTypeDto stockTypeDto) {
 
         Optional<StockType> stock = stockTypeRepository.findById(id);
 
         if (stock.isEmpty()){
-            return "Stock with id " + id + " does not exists in our DB. Please, type a existent id.";
+            throw new EntityNotFoundException("Stock with id " + id + " does not exists in our DB. Please, type a existent id.");
         } else {
             Optional<Book> book = bookRepository.findById(stockTypeDto.getBookId());
             if (book.isPresent()) {
@@ -101,9 +95,8 @@ public class StockTypeServiceImpl implements StockTypeService {
 
                 existingStock.setBook(book.get());
                 stockTypeRepository.save(existingStock);
-                return "Stock with id " + id + " successfully updated.";
             } else {
-                return "Book not found with id " + stockTypeDto.getBookId() + " to associate.";
+                throw new EntityNotFoundException("Book not found with id " + stockTypeDto.getBookId() + " to associate.");
             }
         }
     }

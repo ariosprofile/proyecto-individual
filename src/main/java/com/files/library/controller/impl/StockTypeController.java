@@ -20,28 +20,22 @@ public class StockTypeController implements StockTypeApi {
     @Override
     public ResponseEntity<List<StockTypeDto>>  getStockTypesByBookId(Integer id) {
         List<StockTypeDto> stockTypes = stockTypeService.getStocksByBookId(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Existing stocks of book with id " + id, Integer.toString(stockTypes.size()));
-        return new ResponseEntity<>(stockTypes, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(stockTypes, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<StockTypeDto> createNewStockType(StockTypeDto stockTypeDto) {
         StockTypeDto newStockType = stockTypeService.createStock(stockTypeDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Created id", newStockType.getId().toString());
-        return new ResponseEntity<>(newStockType, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(newStockType, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<String> deleteStockTypeById(Integer id) {
-        String deleteMessage = stockTypeService.deleteStockById(id);
-        return new ResponseEntity<>(deleteMessage, HttpStatus.OK);
+    public ResponseEntity<Void> deleteStockTypeById(Integer id) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<String> modifyExistingStockById(Integer id, StockTypeDto stockTypeDto) {
-        String modifyMessage = stockTypeService.modifyStockById(id, stockTypeDto);
-        return new ResponseEntity<>(modifyMessage, HttpStatus.ACCEPTED);
+    public ResponseEntity<Void> modifyExistingStockById(Integer id, StockTypeDto stockTypeDto) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

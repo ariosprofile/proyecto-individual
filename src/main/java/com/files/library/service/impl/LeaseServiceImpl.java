@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,26 +32,18 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public List<LeaseDto> getLeasesByUserId(Integer id) {
-
-        List<LeaseDto> leaseDtos = new ArrayList<>();
-
-        for (Lease entityLease: leaseRepository.findByUserId(id)) {
-            leaseDtos.add(LeaseMapper.leaseMapperEntityToDto(entityLease));
-        }
-
-        return leaseDtos;
+        return leaseRepository.findByUserId(id)
+                .stream()
+                .map(LeaseMapper :: leaseMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<LeaseDto> getLeasesByStockId(Integer id) {
-
-        List<LeaseDto> leaseDtos = new ArrayList<>();
-
-        for (Lease entityLease: leaseRepository.findByStockTypeId(id)) {
-            leaseDtos.add(LeaseMapper.leaseMapperEntityToDto(entityLease));
-        }
-
-        return leaseDtos;
+        return leaseRepository.findByStockTypeId(id)
+                .stream()
+                .map(LeaseMapper :: leaseMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -73,22 +66,20 @@ public class LeaseServiceImpl implements LeaseService {
     }
 
     @Override
-    public String deleteLeaseById(Integer id) {
+    public void deleteLeaseById(Integer id) {
         Optional<Lease> lease = leaseRepository.findById(id);
-
         if (lease.isEmpty()){
-            return "Couldn't find the lease with id: " + id;
+            throw new EntityNotFoundException("Couldn't find the lease with id: " + id);
         } else {
             leaseRepository.deleteById(id);
-            return "Lease successfully deleted.";
         }
     }
     @Override
-    public String modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto) {
+    public void modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto) {
         Optional<Lease> lease = leaseRepository.findById(id);
 
         if (lease.isEmpty()){
-            return "Lease with id " + id + " does not exists in our DB. Please, type a existent id.";
+            throw new EntityNotFoundException("Lease with id " + id + " does not exists in our DB. Please, type a existent id.");
         } else {
             Optional<LibraryUser> libraryUser = libraryUserRepository.findById(modifiedLeaseDto.getLibraryUserId());
             Optional<StockType> stockType = stockTypeRepository.findById(modifiedLeaseDto.getStockTypeId());
@@ -100,13 +91,13 @@ public class LeaseServiceImpl implements LeaseService {
                 existingLease.setReturnDate(modifiedLeaseDto.getReturnDate());
                 existingLease.setStockType(stockType.get());
                 leaseRepository.save(existingLease);
-                return "Lease with id " + id + " successfully updated.";
             } else {
-                return "Library user or stock type not found with ids "
+                throw new EntityNotFoundException(
+                        "Library user or stock type not found with ids "
                         + modifiedLeaseDto.getLibraryUserId()
                         + ", "
                         + modifiedLeaseDto.getStockTypeId()
-                        + " , respectively, to associate.";
+                        + " , respectively, to associate.");
             }
         }
     }

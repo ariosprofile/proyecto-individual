@@ -15,9 +15,9 @@ public interface StockTypeApi {
     @PostMapping
     ResponseEntity<StockTypeDto>  createNewStockType(@RequestBody StockTypeDto stockTypeDto);
     @DeleteMapping
-    ResponseEntity<String>  deleteStockTypeById(Integer id);
+    ResponseEntity<Void>  deleteStockTypeById(Integer id);
     @PutMapping("/{id}")
-    ResponseEntity<String>  modifyExistingStockById(@PathVariable Integer id, @RequestBody StockTypeDto stockTypeDto);
+    ResponseEntity<Void>  modifyExistingStockById(@PathVariable Integer id, @RequestBody StockTypeDto stockTypeDto);
 
 
 

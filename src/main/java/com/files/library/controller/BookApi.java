@@ -30,8 +30,8 @@ public interface BookApi {
     ResponseEntity<BookDto> createBook(@RequestBody BookDto bookDto);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteBook(@PathVariable Integer id);
+    ResponseEntity<Void> deleteBook(@PathVariable Integer id);
 
     @PutMapping("/{id}")
-    ResponseEntity<String> modifyBook(@PathVariable Integer id, @RequestBody BookDto book);
+    ResponseEntity<Void> modifyBook(@PathVariable Integer id, @RequestBody BookDto book);
 }

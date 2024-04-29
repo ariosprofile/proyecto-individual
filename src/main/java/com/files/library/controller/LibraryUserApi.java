@@ -19,8 +19,8 @@ public interface LibraryUserApi {
     ResponseEntity<LibraryUserDto> createNewLibraryUser(@RequestBody LibraryUserDto libraryUserDto);
 
     @DeleteMapping
-    ResponseEntity<String> deleteUserById(Integer id);
+    ResponseEntity<Void> deleteUserById(Integer id);
 
     @PutMapping("/{id}")
-    ResponseEntity<String> modifyUserById(@PathVariable Integer id, @RequestBody LibraryUserDto userDto);
+    ResponseEntity<Void> modifyUserById(@PathVariable Integer id, @RequestBody LibraryUserDto userDto);
 }

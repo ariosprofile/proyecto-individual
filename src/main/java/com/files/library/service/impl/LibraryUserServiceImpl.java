@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,19 +31,15 @@ public class LibraryUserServiceImpl implements LibraryUserService {
 
     @Override
     public List<LibraryUserDto> getAllUsers() {
-
-        List<LibraryUserDto> libraryUserDtos = new ArrayList<>();
-
-        for (LibraryUser entityLibraryUser: libraryUserRepository.findAll()) {
-            libraryUserDtos.add(LibraryUserMapper.libraryUserMapperEntityToDto(entityLibraryUser));
-        }
-        return libraryUserDtos;
+        return libraryUserRepository.findAll()
+                .stream()
+                .map(LibraryUserMapper :: libraryUserMapperEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public LibraryUserDto getUserById(Integer id) {
         Optional<LibraryUser> user = libraryUserRepository.findById(id);
-
         if (user.isPresent()){
             return LibraryUserMapper.libraryUserMapperEntityToDto(user.get());
         } else {
@@ -56,23 +53,21 @@ public class LibraryUserServiceImpl implements LibraryUserService {
     }
 
     @Override
-    public String deleteUserById(Integer id) {
+    public void deleteUserById(Integer id) {
         Optional<LibraryUser> user = libraryUserRepository.findById(id);
-
         if (user.isEmpty()){
-            return "The user with id " + id + "does not exists in our BD.";
+            throw new EntityNotFoundException("The user with id " + id + "does not exists in our BD.");
         } else {
             libraryUserRepository.deleteById(id);
-            return "User with id " + id + " successfully deleted.";
         }
     }
 
     @Override
-    public String modifyUserById(Integer id, LibraryUserDto libraryUserDto) {
+    public void modifyUserById(Integer id, LibraryUserDto libraryUserDto) {
         Optional<LibraryUser> user = libraryUserRepository.findById(id);
 
         if (user.isEmpty()){
-            return "User with id " + id + " does not exists in our DB. Please, type a existent id.";
+            throw new EntityNotFoundException("User with id " + id + " does not exists in our DB. Please, type a existent id.");
         } else {
             LibraryUser existingUser = user.get();
             existingUser.setUserName(libraryUserDto.getUserName());
@@ -95,7 +90,7 @@ public class LibraryUserServiceImpl implements LibraryUserService {
             }
 
             libraryUserRepository.save(existingUser);
-            return "User with id " + id + " successfully updated.";
+
         }
     }
 }

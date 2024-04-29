@@ -9,6 +9,6 @@ public interface StockTypeService {
 
     List<StockTypeDto> getStocksByBookId(Integer id);
     StockTypeDto createStock(StockTypeDto stockTypeDto);
-    String deleteStockById(Integer id);
-    String modifyStockById(Integer id, StockTypeDto stockTypeDto);
+    void deleteStockById(Integer id);
+    void modifyStockById(Integer id, StockTypeDto stockTypeDto);
 }

@@ -21,34 +21,28 @@ public class LibraryUserController implements LibraryUserApi {
     @Override
     public ResponseEntity<List<LibraryUserDto>> getAllUsers() {
         List<LibraryUserDto> libraryUsersDto = libraryUserService.getAllUsers();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Existing Users", Integer.toString(libraryUsersDto.size()));
-        return new ResponseEntity<>(libraryUsersDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(libraryUsersDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<LibraryUserDto> getLibraryUserById(Integer id) {
         LibraryUserDto libraryUser = libraryUserService.getUserById(id);
-        return new ResponseEntity<>(libraryUser, HttpStatus.FOUND);
+        return new ResponseEntity<>(libraryUser, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<LibraryUserDto> createNewLibraryUser(LibraryUserDto libraryUserDto) {
         LibraryUserDto newLibraryUser = libraryUserService.createUser(libraryUserDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Created id", newLibraryUser.getId().toString());
-        return new ResponseEntity<>(newLibraryUser, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(newLibraryUser, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<String> deleteUserById(Integer id) {
-        String deleteMessage = libraryUserService.deleteUserById(id);
-        return new ResponseEntity<>(deleteMessage, HttpStatus.OK);
+    public ResponseEntity<Void> deleteUserById(Integer id) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<String> modifyUserById(Integer id, LibraryUserDto userDto) {
-        String modifyMessage = libraryUserService.modifyUserById(id, userDto);
-        return new ResponseEntity<>(modifyMessage, HttpStatus.ACCEPTED);
+    public ResponseEntity<Void> modifyUserById(Integer id, LibraryUserDto userDto) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

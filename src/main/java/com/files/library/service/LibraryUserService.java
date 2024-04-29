@@ -10,7 +10,7 @@ public interface LibraryUserService {
     List<LibraryUserDto> getAllUsers();
     LibraryUserDto getUserById(Integer id);
     LibraryUserDto createUser(LibraryUserDto userDto);
-    String deleteUserById(Integer id);
-    String modifyUserById(Integer id, LibraryUserDto libraryUserDto);
+    void deleteUserById(Integer id);
+    void modifyUserById(Integer id, LibraryUserDto libraryUserDto);
 
 }

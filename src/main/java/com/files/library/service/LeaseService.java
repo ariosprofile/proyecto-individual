@@ -10,6 +10,6 @@ public interface LeaseService {
     List<LeaseDto> getLeasesByUserId(Integer id);
     List<LeaseDto> getLeasesByStockId(Integer id);
     LeaseDto createNewLease(LeaseDto leaseDto);
-    String deleteLeaseById(Integer id);
-    String modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto);
+    void deleteLeaseById(Integer id);
+    void modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto);
 }

@@ -23,50 +23,34 @@ public class BookController implements BookApi {
     @Override
     public ResponseEntity<List<BookDto>> getAllBooks() {
         List<BookDto> booksDto =  bookService.getAllBooks();
-        HttpHeaders headers = new HttpHeaders();
-        int countOfExistingBooks = booksDto.size();
-        headers.add("Existing books", Integer.toString(countOfExistingBooks));
 
-        return new ResponseEntity<>(booksDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<BookDto>> getBookByTitle(String title) {
         List<BookDto> booksDto = bookService.getBookByTitle(title);
-        HttpHeaders headers = new HttpHeaders();
-        int countOfExistingBooks = booksDto.size();
-        headers.add("Existing books", Integer.toString(countOfExistingBooks));
 
-        return new ResponseEntity<>(booksDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<BookDto>> getBooksByGenre(String genre) {
         List<BookDto> booksDto =  bookService.getBooksByGenre(genre);
-        HttpHeaders headers = new HttpHeaders();
-        int countOfExistingBooks = booksDto.size();
-        headers.add("Existing books (" + genre + ")", Integer.toString(countOfExistingBooks));
 
-        return new ResponseEntity<>(booksDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<BookDto>> getBooksByAuthor(String author) {
         List<BookDto> booksDto =  bookService.getBooksByAuthor(author);
-        HttpHeaders headers = new HttpHeaders();
-        int countOfExistingBooks = booksDto.size();
-        headers.add("Existing books", Integer.toString(countOfExistingBooks));
-
-        return new ResponseEntity<>(booksDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<BookDto>  getBookById(Integer id) {
         BookDto bookDto = bookService.getBookById(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Book id", bookDto.getId().toString());
-
-        return new ResponseEntity<>(bookDto, headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(bookDto, HttpStatus.OK);
     }
 
     @Override
@@ -78,14 +62,12 @@ public class BookController implements BookApi {
     }
 
     @Override
-    public ResponseEntity<String> deleteBook(Integer id) {
-        String deleteMessage =  bookService.deleteBookById(id);
-        return new ResponseEntity<>(deleteMessage, HttpStatus.OK);
+    public ResponseEntity<Void> deleteBook(Integer id) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<String> modifyBook(Integer id, BookDto book) {
-        String modifyMessage = bookService.modifyBookById(id, book);
-        return new ResponseEntity<>(modifyMessage, HttpStatus.ACCEPTED);
+    public ResponseEntity<Void> modifyBook(Integer id, BookDto book) {
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
