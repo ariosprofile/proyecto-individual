@@ -32,7 +32,14 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public List<LeaseDto> getLeasesByUserId(Integer id) {
-        return leaseRepository.findByUserId(id)
+
+        List<Lease> leases = leaseRepository.findByUserId(id);
+
+        if (leases.isEmpty()){
+            throw new EntityNotFoundException("No leases to show in our DB.");
+        }
+
+        return  leases
                 .stream()
                 .map(LeaseMapper :: leaseMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -40,7 +47,14 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public List<LeaseDto> getLeasesByStockId(Integer id) {
-        return leaseRepository.findByStockTypeId(id)
+
+        List<Lease> leases = leaseRepository.findByStockTypeId(id);
+
+        if (leases.isEmpty()){
+            throw new EntityNotFoundException("No leases to show in our DB.");
+        }
+
+        return  leases
                 .stream()
                 .map(LeaseMapper :: leaseMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -48,6 +62,10 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public LeaseDto createNewLease(LeaseDto leaseDto) {
+
+        if (leaseDto == null) {
+            throw new IllegalArgumentException("LeaseDto object cannot be null.");
+        }
 
         Optional<LibraryUser> libraryUser = libraryUserRepository.findById(leaseDto.getLibraryUserId());
         Optional<StockType> stockType = stockTypeRepository.findById(leaseDto.getStockTypeId());
@@ -71,7 +89,12 @@ public class LeaseServiceImpl implements LeaseService {
         if (lease.isEmpty()){
             throw new EntityNotFoundException("Couldn't find the lease with id: " + id);
         } else {
-            leaseRepository.deleteById(id);
+            try {
+                leaseRepository.deleteById(id);
+            } catch (InternalError e){
+                e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+            }
+
         }
     }
     @Override
@@ -90,7 +113,13 @@ public class LeaseServiceImpl implements LeaseService {
                 existingLease.setTotalCost(modifiedLeaseDto.getTotalCost());
                 existingLease.setReturnDate(modifiedLeaseDto.getReturnDate());
                 existingLease.setStockType(stockType.get());
-                leaseRepository.save(existingLease);
+
+                try {
+                    leaseRepository.save(existingLease);
+                } catch (InternalError e){
+                    e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+                }
+
             } else {
                 throw new EntityNotFoundException(
                         "Library user or stock type not found with ids "

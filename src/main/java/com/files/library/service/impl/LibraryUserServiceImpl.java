@@ -31,7 +31,14 @@ public class LibraryUserServiceImpl implements LibraryUserService {
 
     @Override
     public List<LibraryUserDto> getAllUsers() {
-        return libraryUserRepository.findAll()
+
+        List<LibraryUser> libraryUsers = libraryUserRepository.findAll();
+
+        if (libraryUsers.isEmpty()){
+            throw new EntityNotFoundException("No library users to show in our DB.");
+        }
+
+        return  libraryUsers
                 .stream()
                 .map(LibraryUserMapper :: libraryUserMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -49,6 +56,11 @@ public class LibraryUserServiceImpl implements LibraryUserService {
 
     @Override
     public LibraryUserDto createUser(LibraryUserDto userDto) {
+
+        if (userDto == null) {
+            throw new IllegalArgumentException("UserDto object cannot be null.");
+        }
+
         return LibraryUserMapper.libraryUserMapperEntityToDto(libraryUserRepository.save(LibraryUserMapper.libraryUserMapperDtoToEntity(userDto)));
     }
 
@@ -58,7 +70,11 @@ public class LibraryUserServiceImpl implements LibraryUserService {
         if (user.isEmpty()){
             throw new EntityNotFoundException("The user with id " + id + "does not exists in our BD.");
         } else {
-            libraryUserRepository.deleteById(id);
+            try {
+                libraryUserRepository.deleteById(id);
+            } catch (InternalError e){
+                e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+            }
         }
     }
 
@@ -89,8 +105,11 @@ public class LibraryUserServiceImpl implements LibraryUserService {
                 existingUser.setLeases(leases);
             }
 
-            libraryUserRepository.save(existingUser);
-
+            try {
+                libraryUserRepository.save(existingUser);
+            } catch (InternalError e){
+                e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+            }
         }
     }
 }

@@ -7,6 +7,10 @@ public class LibraryUserMapper {
 
     public static LibraryUserDto libraryUserMapperEntityToDto(LibraryUser libraryUser){
 
+        if (libraryUser == null){
+            throw new IllegalArgumentException("LibraryUser object cannot be null");
+        }
+
         return LibraryUserDto.builder()
                 .id(libraryUser.getId())
                 .address(libraryUser.getAddress())
@@ -18,6 +22,11 @@ public class LibraryUserMapper {
     }
 
     public static LibraryUser libraryUserMapperDtoToEntity(LibraryUserDto libraryUserDto){
+
+        if (libraryUserDto == null){
+            throw new IllegalArgumentException("LibraryUser object cannot be null");
+        }
+
         return LibraryUser.builder()
                 .address(libraryUserDto.getAddress())
                 .userName(libraryUserDto.getUserName())

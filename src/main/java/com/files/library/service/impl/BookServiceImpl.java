@@ -29,7 +29,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAllBooks() {
-        return bookRepository.findAll()
+
+        List<Book> books = bookRepository.findAll();
+
+        if (books.isEmpty()) {
+            throw new EntityNotFoundException("No books to show in our DB.");
+        }
+
+        return  books
                 .stream()
                 .map(BookMapper :: BookMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -37,7 +44,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getBookByTitle(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title)
+
+        List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
+
+        if (books.isEmpty()){
+            throw new EntityNotFoundException("No books to show in our DB.");
+        }
+
+        return  books
                 .stream()
                 .map(BookMapper :: BookMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -45,7 +59,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getBooksByGenre(String genre) {
-        return bookRepository.findByGenreContainingIgnoreCase(genre)
+
+        List<Book> books = bookRepository.findByGenreContainingIgnoreCase(genre);
+
+        if (books.isEmpty()){
+            throw new EntityNotFoundException("No books to show in our DB.");
+        }
+
+        return  books
                 .stream()
                 .map(BookMapper :: BookMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -53,7 +74,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getBooksByAuthor(String author) {
-        return bookRepository.findByAuthorContainingIgnoreCase(author)
+
+        List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
+
+        if (books.isEmpty()){
+            throw new EntityNotFoundException("No books to show in our DB.");
+        }
+
+        return  books
                 .stream()
                 .map(BookMapper :: BookMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -71,7 +99,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto createBook(BookDto bookDto) {
-        return BookMapper.BookMapperEntityToDto(bookRepository.save(BookMapper.BookMapperDtoToEntity(bookDto)));
+
+        if (bookDto == null) {
+            throw new IllegalArgumentException("BooDto object can not be null.");
+        }
+
+        return BookMapper.BookMapperEntityToDto(
+                bookRepository.save(BookMapper.BookMapperDtoToEntity(bookDto)));
     }
 
     @Override
@@ -81,7 +115,12 @@ public class BookServiceImpl implements BookService {
         if (book.isEmpty()) {
             throw new EntityNotFoundException("Couldn't find the book with id: " + id);
         } else {
-            bookRepository.delete(book.get());
+            try {
+                bookRepository.delete(book.get());
+            } catch (InternalError e){
+                e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+            }
+
         }
     }
 
@@ -89,7 +128,11 @@ public class BookServiceImpl implements BookService {
     public void modifyBookById(Integer id, BookDto modifiedBook) {
         Optional<Book> optionalBook = bookRepository.findById(id);
 
-        if (optionalBook.isPresent()) {
+        if (optionalBook.isEmpty()) {
+            throw new EntityNotFoundException("Book with id " + id + " does not exist in our DB. Please, type an existent id.");
+        }
+
+        try {
             Book book = optionalBook.get();
             book.setAuthor(modifiedBook.getAuthor());
             book.setGenre(modifiedBook.getGenre());
@@ -111,8 +154,8 @@ public class BookServiceImpl implements BookService {
             }
 
             bookRepository.save(book);
-        } else {
-            throw new EntityNotFoundException("Book with id " + id + " does not exist in our DB. Please, type an existent id.");
+        } catch (InternalError e){
+            e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
         }
     }
 }

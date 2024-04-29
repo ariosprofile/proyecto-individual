@@ -14,6 +14,11 @@ import java.util.List;
 public class LeaseMapper {
 
     public static LeaseDto leaseMapperEntityToDto(Lease lease){
+
+        if (lease == null){
+            throw new IllegalArgumentException("Lease object cannot be null");
+        }
+
         return LeaseDto.builder()
                 .id(lease.getId())
                 .totalCost(lease.getTotalCost())
@@ -25,6 +30,11 @@ public class LeaseMapper {
     }
 
     public static Lease leaseMapperDtoToEntity(LeaseDto leaseDto){
+
+        if (leaseDto == null){
+            throw new IllegalArgumentException("Lease object cannot be null");
+        }
+
         return Lease.builder()
                 .totalCost(leaseDto.getTotalCost())
                 .leaseDate(leaseDto.getLeaseDate())
@@ -47,6 +57,11 @@ public class LeaseMapper {
     }
 
     public static List<Lease> mapLeasesFromDtoToEntity(List<LeaseDto> leaseDtos){
+
+        if(leaseDtos == null){
+            return Collections.emptyList();
+        }
+
         List<Lease> leases = new ArrayList<>();
 
         for (LeaseDto dtoLease : leaseDtos) {

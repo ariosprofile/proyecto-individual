@@ -23,21 +23,18 @@ public class BookController implements BookApi {
     @Override
     public ResponseEntity<List<BookDto>> getAllBooks() {
         List<BookDto> booksDto =  bookService.getAllBooks();
-
         return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<BookDto>> getBookByTitle(String title) {
         List<BookDto> booksDto = bookService.getBookByTitle(title);
-
         return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<BookDto>> getBooksByGenre(String genre) {
         List<BookDto> booksDto =  bookService.getBooksByGenre(genre);
-
         return new ResponseEntity<>(booksDto, HttpStatus.OK);
     }
 
@@ -56,9 +53,7 @@ public class BookController implements BookApi {
     @Override
     public ResponseEntity<BookDto> createBook(BookDto book) {
         BookDto newBook = bookService.createBook(book);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Created id", newBook.getId().toString());
-        return new ResponseEntity<>(newBook, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
     }
 
     @Override

@@ -18,6 +18,11 @@ public class StockTypeMapper {
     private BookRepository bookRepository;
 
     public static StockTypeDto stockTypeMapperEntityToDto(StockType stockType) {
+
+        if (stockType == null){
+            throw new IllegalArgumentException("StockTypeDto object cannot be null");
+        }
+
         return StockTypeDto.builder()
                 .id(stockType.getId())
                 .type(stockType.getType())
@@ -30,8 +35,8 @@ public class StockTypeMapper {
 
     public static StockType stockTypeMapperDtoToEntity(StockTypeDto stockTypeDto){
 
-        if (stockTypeDto == null) {
-            return null;
+        if (stockTypeDto == null){
+            throw new IllegalArgumentException("StockTypeDto object cannot be null");
         }
 
         return StockType.builder()

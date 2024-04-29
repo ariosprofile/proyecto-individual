@@ -11,6 +11,11 @@ import java.util.List;
 public class BookMapper {
 
     public static BookDto BookMapperEntityToDto(Book book){
+
+        if (book == null){
+            throw new IllegalArgumentException("Book object cannot be null");
+        }
+
         return BookDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -22,6 +27,11 @@ public class BookMapper {
     }
 
     public static Book BookMapperDtoToEntity(BookDto bookDto){
+
+        if (bookDto == null){
+            throw new IllegalArgumentException("Book object cannot be null");
+        }
+
         return Book.builder()
                 .title(bookDto.getTitle())
                 .author(bookDto.getAuthor())

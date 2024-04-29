@@ -14,7 +14,7 @@ public interface BookApi {
     @GetMapping
     ResponseEntity<List<BookDto>> getAllBooks();
 
-    @GetMapping("/title/{title}")
+    @GetMapping("/{title}")
     ResponseEntity<List<BookDto>> getBookByTitle(@PathVariable String title);
 
     @GetMapping("/genre/{genre}")

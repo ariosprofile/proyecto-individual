@@ -34,7 +34,14 @@ public class StockTypeServiceImpl implements StockTypeService {
 
     @Override
     public List<StockTypeDto> getStocksByBookId(Integer id) {
-        return stockTypeRepository.findByBookId(id)
+
+        List<StockType> stockTypes = stockTypeRepository.findByBookId(id);
+
+        if (stockTypes.isEmpty()){
+            throw new EntityNotFoundException("No stock types to show in our DB.");
+        }
+
+        return  stockTypes
                 .stream()
                 .map(StockTypeMapper :: stockTypeMapperEntityToDto)
                 .collect(Collectors.toList());
@@ -42,6 +49,11 @@ public class StockTypeServiceImpl implements StockTypeService {
 
     @Override
     public StockTypeDto createStock(StockTypeDto stockTypeDto) {
+
+        if (stockTypeDto == null) {
+            throw new EntityNotFoundException("StockTypeDto object cannot be null.");
+        }
+
         Optional<Book> book = bookRepository.findById(stockTypeDto.getBookId());
 
         if (book.isPresent()){
@@ -59,7 +71,11 @@ public class StockTypeServiceImpl implements StockTypeService {
         if (stock.isEmpty()){
             throw new EntityNotFoundException("Stock with id " + id + "does not exists in our DB.");
         } else {
-            stockTypeRepository.deleteById(id);
+            try {
+                stockTypeRepository.deleteById(id);
+            } catch (InternalError e){
+                e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+            }
         }
     }
 
@@ -79,9 +95,7 @@ public class StockTypeServiceImpl implements StockTypeService {
                 existingStock.setType(stockTypeDto.getType());
                 existingStock.setCostPerDay(stockTypeDto.getCostPerDay());
 
-                if (stockTypeDto.getLeasesIds() == null){
-                    existingStock.setLeases(Collections.emptyList());
-                } else {
+                if (stockTypeDto.getLeasesIds() != null){
                     List<Lease> leases = new ArrayList<>();
 
                     for (Integer leaseId : stockTypeDto.getLeasesIds()) {
@@ -94,7 +108,13 @@ public class StockTypeServiceImpl implements StockTypeService {
                 }
 
                 existingStock.setBook(book.get());
-                stockTypeRepository.save(existingStock);
+
+                try {
+                    stockTypeRepository.save(existingStock);
+                }catch (InternalError e){
+                    e.addSuppressed(new Throwable("A problem occurred in the process. Try again in a few minutes."));
+                }
+
             } else {
                 throw new EntityNotFoundException("Book not found with id " + stockTypeDto.getBookId() + " to associate.");
             }
