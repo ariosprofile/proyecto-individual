@@ -39,11 +39,13 @@ public class LeaseController implements LeaseApi {
 
     @Override
     public ResponseEntity<Void> deleteLeaseById(Integer id) {
+        leaseService.deleteLeaseById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Void> modifyLeaseById(Integer id, LeaseDto leaseDto) {
+        leaseService.modifyLeaseById(id, leaseDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

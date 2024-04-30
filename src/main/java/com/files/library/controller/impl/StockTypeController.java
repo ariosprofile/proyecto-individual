@@ -31,11 +31,13 @@ public class StockTypeController implements StockTypeApi {
 
     @Override
     public ResponseEntity<Void> deleteStockTypeById(Integer id) {
+        stockTypeService.deleteStockById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Void> modifyExistingStockById(Integer id, StockTypeDto stockTypeDto) {
+        stockTypeService.modifyStockById(id, stockTypeDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

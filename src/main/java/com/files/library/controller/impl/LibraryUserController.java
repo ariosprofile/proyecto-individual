@@ -38,11 +38,13 @@ public class LibraryUserController implements LibraryUserApi {
 
     @Override
     public ResponseEntity<Void> deleteUserById(Integer id) {
+        libraryUserService.deleteUserById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Void> modifyUserById(Integer id, LibraryUserDto userDto) {
+        libraryUserService.modifyUserById(id, userDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

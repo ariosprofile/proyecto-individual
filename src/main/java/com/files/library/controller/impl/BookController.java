@@ -58,11 +58,13 @@ public class BookController implements BookApi {
 
     @Override
     public ResponseEntity<Void> deleteBook(Integer id) {
+        bookService.deleteBookById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<Void> modifyBook(Integer id, BookDto book) {
+        bookService.modifyBookById(id, book);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
