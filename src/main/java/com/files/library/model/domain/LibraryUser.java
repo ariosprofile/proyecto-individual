@@ -16,7 +16,6 @@ public class LibraryUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-
     private String userName;
     private String password;
     private String address;

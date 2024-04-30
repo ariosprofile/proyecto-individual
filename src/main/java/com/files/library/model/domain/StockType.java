@@ -16,11 +16,8 @@ public class StockType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-
     private Integer stock;
-
     private Integer type;
-
     private Double costPerDay;
 
     @ManyToOne

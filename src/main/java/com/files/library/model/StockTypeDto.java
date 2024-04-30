@@ -1,18 +1,20 @@
 package com.files.library.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class StockTypeDto {
 
+    private Integer id;
     private Integer stock;
     private Integer type;
     private Double costPerDay;
-    private List<LeasesDto> leasedCopies;
+    private Integer bookId;
+    private List<Integer> leasesIds;
 }

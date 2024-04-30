@@ -1,13 +1,15 @@
 package com.files.library.service;
 
+import com.files.library.model.LeaseDto;
 import com.files.library.model.domain.Lease;
 
 import java.util.List;
 
 public interface LeaseService {
 
-    List<Lease> getLeasesByUserId(Integer id);
-    List<Lease> getLeasesByStockId(Integer id);
-    String deleteLeaseById(Integer id);
-    String modifyLeaseById(Integer id, Lease modifiedLease);
+    List<LeaseDto> getLeasesByUserId(Integer id);
+    List<LeaseDto> getLeasesByStockId(Integer id);
+    LeaseDto createNewLease(LeaseDto leaseDto);
+    void deleteLeaseById(Integer id);
+    void modifyLeaseById(Integer id, LeaseDto modifiedLeaseDto);
 }
